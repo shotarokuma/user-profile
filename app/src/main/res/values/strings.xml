@@ -1,3 +1,13 @@
 <resources>
-    <string name="app_name">My Application</string>
+    <string name="app_name">MyRuns1</string>
+    <string name="name_input">Your Name</string>
+    <string name="mail_input">Your Email</string>
+    <string name="phone_input">Your Phone Number</string>
+    <string name="female_radio">Female</string>
+    <string name="male_radio">Male</string>
+    <string name="class_input">eg.2012</string>
+    <string name="major_input">Your Major</string>
+    <string name="change_button">Change</string>
+    <string name="save_button">Save</string>
+    <string name="cancel_button">Cancel</string>
 </resources>
