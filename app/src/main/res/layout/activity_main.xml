@@ -33,6 +33,7 @@
             android:layout_height="wrap_content"
             android:text="@string/name"/>
         <EditText
+            android:id="@+id/name_input"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:hint="@string/name_input" />
@@ -41,6 +42,7 @@
             android:layout_height="wrap_content"
             android:text="@string/mail"/>
         <EditText
+            android:id="@+id/mail_input"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:hint="@string/mail_input"/>
@@ -49,10 +51,13 @@
             android:layout_height="wrap_content"
             android:text="@string/phone"/>
         <EditText
+            android:inputType="number"
+            android:id="@+id/phone_input"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:hint="@string/phone_input"/>
         <TextView
+            android:id="@+id/gender_radio"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/gender"/>
@@ -74,6 +79,8 @@
             android:layout_height="wrap_content"
             android:text="@string/class_title"/>
         <EditText
+            android:inputType="number"
+            android:id="@+id/class_input"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:hint="@string/class_input"/>
@@ -82,6 +89,7 @@
             android:layout_height="wrap_content"
             android:text="@string/major"/>
         <EditText
+            android:id="@+id/major_input"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:hint="@string/major_input"/>
