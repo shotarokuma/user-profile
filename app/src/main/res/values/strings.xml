@@ -1,5 +1,12 @@
 <resources>
     <string name="app_name">MyRuns1</string>
+    <string name="photo">Profile Photo:</string>
+    <string name="name">Name</string>
+    <string name="mail">Email</string>
+    <string name="phone">Phone</string>
+    <string name="gender">Gender</string>
+    <string name="class_title">Class</string>
+    <string name="major">Major</string>
     <string name="name_input">Your Name</string>
     <string name="mail_input">Your Email</string>
     <string name="phone_input">Your Phone Number</string>
