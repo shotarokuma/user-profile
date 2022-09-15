@@ -57,7 +57,6 @@
             android:layout_height="match_parent"
             android:hint="@string/phone_input"/>
         <TextView
-            android:id="@+id/gender_radio"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/gender"/>
@@ -66,10 +65,12 @@
             android:layout_height="match_parent"
             android:orientation="horizontal">
             <RadioButton
+                android:id="@+id/female_radio"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/female_radio"/>
             <RadioButton
+                android:id="@+id/male_radio"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/male_radio"/>
@@ -99,10 +100,12 @@
             android:layout_height="match_parent"
             >
         <Button
+            android:onClick="onSave"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/save_button"/>
         <Button
+            android:onClick="onCancel"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/cancel_button"/>
