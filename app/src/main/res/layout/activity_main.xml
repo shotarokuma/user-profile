@@ -21,9 +21,11 @@
         android:layout_height="match_parent"
         >
         <ImageView
+            android:id="@+id/photo_image"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"/>
         <Button
+            android:onClick="onTakePhoto"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/change_button" />
