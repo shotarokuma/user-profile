@@ -32,14 +32,13 @@ class MainActivity : AppCompatActivity() {
     private lateinit var tempImgFileName: String
     private lateinit var tempImgUri: Uri
     private lateinit var cameraResult: ActivityResultLauncher<Intent>
-    private lateinit var viewModel:MyViewModel;
-    private lateinit var line: String
+    private lateinit var viewModel:MyViewModel
+    private lateinit var imgUri: String
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-        val sharedPref = getPreferences(Context.MODE_PRIVATE)
         imageView = findViewById(R.id.photo_image)
         nameView = findViewById(R.id.name_input)
         mailView = findViewById(R.id.mail_input)
@@ -49,13 +48,7 @@ class MainActivity : AppCompatActivity() {
         classView = findViewById(R.id.class_input)
         majorView = findViewById(R.id.major_input)
 
-        nameView.setText(sharedPref.getString("name", null))
-        mailView.setText(sharedPref.getString("mail", null))
-        phoneView.setText(sharedPref.getString("phone", null))
-        classView.setText(sharedPref.getString("class", null))
-        majorView.setText(sharedPref.getString("major", null))
-        femaleView.isChecked = sharedPref.getBoolean("female", false)
-        maleView.isChecked = sharedPref.getBoolean("male", false)
+        loadProfile()
 
         Util.checkPermissions(this);
 
@@ -69,9 +62,7 @@ class MainActivity : AppCompatActivity() {
             if (result.resultCode == Activity.RESULT_OK) {
                 val bitmap = Util.getBitmap(this, tempImgUri)
                 viewModel.userImage.value = bitmap;
-
-                line = tempImgUri.path.toString();
-
+                imgUri = tempImgUri.path.toString();
             }
         }
         viewModel.userImage.observe(this, Observer { it ->
@@ -79,19 +70,43 @@ class MainActivity : AppCompatActivity() {
         })
 
         if(savedInstanceState != null){
-            line = savedInstanceState.getString(KEY).toString();
+            imgUri = savedInstanceState.getString(PATH).toString();
         }
     }
 
-    fun onSave(view: View){
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        outState.putString(PATH, imgUri)
+    }
+
+    private  fun loadProfile(){
         val sharedPref = getPreferences(Context.MODE_PRIVATE)
-        sharedPref.edit().putString("name", nameView.text.toString()).apply()
-        sharedPref.edit().putString("mail", mailView.text.toString()).apply()
-        sharedPref.edit().putString("phone", phoneView.text.toString()).apply()
-        sharedPref.edit().putString("class", classView.text.toString()).apply()
-        sharedPref.edit().putString("major", majorView.text.toString()).apply()
-        sharedPref.edit().putBoolean("male", maleView.isChecked).apply()
-        sharedPref.edit().putBoolean("female", femaleView.isChecked).apply()
+        nameView.setText(sharedPref.getString(NAME, null))
+        mailView.setText(sharedPref.getString(MAIL, null))
+        phoneView.setText(sharedPref.getString(PHONE, null))
+        classView.setText(sharedPref.getString(CLASS, null))
+        majorView.setText(sharedPref.getString(MAJOR, null))
+        femaleView.isChecked = sharedPref.getBoolean(FEMALE, false)
+        maleView.isChecked = sharedPref.getBoolean(MALE, false)
+        imgUri = sharedPref.getString(PATH, ".").toString()
+    }
+
+
+   private fun saveProfile(){
+        val sharedPref = getPreferences(Context.MODE_PRIVATE)
+        sharedPref.edit().putString(NAME, nameView.text.toString()).apply()
+        sharedPref.edit().putString(MAIL, mailView.text.toString()).apply()
+        sharedPref.edit().putString(PHONE, phoneView.text.toString()).apply()
+        sharedPref.edit().putString(CLASS, classView.text.toString()).apply()
+        sharedPref.edit().putString(MAJOR, majorView.text.toString()).apply()
+        sharedPref.edit().putBoolean(MALE, maleView.isChecked).apply()
+        sharedPref.edit().putBoolean(FEMALE, femaleView.isChecked).apply()
+       sharedPref.edit().putString(PATH, imgUri).apply()
+    }
+
+
+    fun onSave(view: View){
+        saveProfile()
         Toast.makeText(
             this,
             "saved",
@@ -111,6 +126,13 @@ class MainActivity : AppCompatActivity() {
     }
 
     companion object{
-        val KEY = "my_mey"
+        const val NAME = "name"
+        const val MAIL = "mail"
+        const val PHONE = "phone"
+        const val CLASS = "class"
+        const val MAJOR = "major"
+        const val MALE = "male"
+        const val FEMALE = "female"
+        const val PATH = "path"
     }
 }
