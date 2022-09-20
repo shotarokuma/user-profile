@@ -3,10 +3,12 @@ package com.example.myapplication
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import android.net.Uri
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.provider.MediaStore
+import android.util.Base64
 import android.view.View
 import android.widget.EditText
 import android.widget.ImageView
@@ -15,10 +17,13 @@ import android.widget.Toast
 import androidx.activity.result.ActivityResult
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.FileProvider
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import java.io.ByteArrayOutputStream
 import java.io.File
+
 
 class MainActivity : AppCompatActivity() {
     private lateinit var imageView: ImageView
@@ -33,7 +38,6 @@ class MainActivity : AppCompatActivity() {
     private lateinit var tempImgUri: Uri
     private lateinit var cameraResult: ActivityResultLauncher<Intent>
     private lateinit var viewModel:MyViewModel
-    private lateinit var imgUri: String
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -48,36 +52,28 @@ class MainActivity : AppCompatActivity() {
         classView = findViewById(R.id.class_input)
         majorView = findViewById(R.id.major_input)
 
+        viewModel = ViewModelProvider(this).get(MyViewModel::class.java)
+
         loadProfile()
 
-        Util.checkPermissions(this);
+        Util.checkPermissions(this)
 
         tempImgFileName= "xd_img.jpg"
         val tempImgFile = File(getExternalFilesDir(null), tempImgFileName)
         tempImgUri = FileProvider.getUriForFile(this, "com.example.myapplication", tempImgFile)
-        viewModel = ViewModelProvider(this).get(MyViewModel::class.java)
         cameraResult = registerForActivityResult(
             ActivityResultContracts.StartActivityForResult()
         ) { result: ActivityResult ->
             if (result.resultCode == Activity.RESULT_OK) {
                 val bitmap = Util.getBitmap(this, tempImgUri)
-                viewModel.userImage.value = bitmap;
-                imgUri = tempImgUri.path.toString();
+                viewModel.userImage.value = bitmap
             }
         }
         viewModel.userImage.observe(this, Observer { it ->
             imageView.setImageBitmap(it)
         })
-
-        if(savedInstanceState != null){
-            imgUri = savedInstanceState.getString(PATH).toString();
-        }
     }
 
-    override fun onSaveInstanceState(outState: Bundle) {
-        super.onSaveInstanceState(outState)
-        outState.putString(PATH, imgUri)
-    }
 
     private  fun loadProfile(){
         val sharedPref = getPreferences(Context.MODE_PRIVATE)
@@ -88,7 +84,12 @@ class MainActivity : AppCompatActivity() {
         majorView.setText(sharedPref.getString(MAJOR, null))
         femaleView.isChecked = sharedPref.getBoolean(FEMALE, false)
         maleView.isChecked = sharedPref.getBoolean(MALE, false)
-        imgUri = sharedPref.getString(PATH, ".").toString()
+        val imgData: String? = sharedPref.getString(IMG_DATA, null)
+        if(imgData !== null){
+            val b: ByteArray = Base64.decode(imgData, Base64.DEFAULT)
+            val bitmap = BitmapFactory.decodeByteArray(b, 0, b.size)
+            viewModel.userImage.value = bitmap
+        }
     }
 
 
@@ -101,7 +102,12 @@ class MainActivity : AppCompatActivity() {
         sharedPref.edit().putString(MAJOR, majorView.text.toString()).apply()
         sharedPref.edit().putBoolean(MALE, maleView.isChecked).apply()
         sharedPref.edit().putBoolean(FEMALE, femaleView.isChecked).apply()
-       sharedPref.edit().putString(PATH, imgUri).apply()
+
+       val bas:ByteArrayOutputStream = ByteArrayOutputStream()
+       viewModel.userImage.value?.compress(Bitmap.CompressFormat.JPEG, 100, bas)
+       val b: ByteArray = bas.toByteArray()
+       val encodedImg: String = Base64.encodeToString(b, Base64.DEFAULT)
+       sharedPref.edit().putString(IMG_DATA, encodedImg).apply()
     }
 
 
@@ -133,6 +139,6 @@ class MainActivity : AppCompatActivity() {
         const val MAJOR = "major"
         const val MALE = "male"
         const val FEMALE = "female"
-        const val PATH = "path"
+        const val IMG_DATA = "img_data"
     }
 }

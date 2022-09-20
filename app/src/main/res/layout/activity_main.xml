@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView
     xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -19,13 +18,14 @@
         android:layout_width="match_parent"
         android:orientation="horizontal"
         android:layout_height="match_parent"
-        android:gravity="right"
+        android:gravity="end"
         >
         <ImageView
             android:id="@+id/photo_image"
             android:layout_width="100dp"
             android:layout_height="100dp"
-            android:layout_marginRight="90dp"
+            android:layout_marginEnd="90dp"
+            android:contentDescription="@string/profile"
             />
         <Button
             android:onClick="onTakePhoto"
@@ -46,7 +46,9 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:hint="@string/name_input"
+            android:inputType="text"
             android:layout_margin="5dp"
+            android:autofillHints=""
             />
         <TextView
             android:layout_width="wrap_content"
@@ -59,6 +61,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:hint="@string/mail_input"
+            android:inputType="text"
             android:layout_margin="5dp"
             />
         <TextView
@@ -68,8 +71,8 @@
             android:layout_margin="5dp"
             />
         <EditText
-            android:inputType="number"
             android:id="@+id/phone_input"
+            android:inputType="number"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:hint="@string/phone_input"
@@ -92,14 +95,14 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/female_radio"
-                android:layout_marginRight="50dp"
+                android:layout_marginEnd="50dp"
                 />
             <RadioButton
                 android:id="@+id/male_radio"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/male_radio"
-                android:layout_marginLeft="50dp"
+                android:layout_marginStart="50dp"
                 />
         </RadioGroup>
         <TextView
@@ -109,8 +112,8 @@
             android:layout_margin="5dp"
             />
         <EditText
-            android:inputType="number"
             android:id="@+id/class_input"
+            android:inputType="number"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:hint="@string/class_input"
@@ -124,6 +127,7 @@
             />
         <EditText
             android:id="@+id/major_input"
+            android:inputType="text"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:hint="@string/major_input"
@@ -137,19 +141,23 @@
             >
 
             <Button
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
+                android:layout_weight=".30"
                 android:layout_height="wrap_content"
                 android:onClick="onSave"
                 android:text="@string/save_button"
-                android:layout_marginRight="5dp"
-                />
+                android:layout_marginEnd="5dp"
+                android:layout_marginStart="20dp"
 
+                />
             <Button
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
+                android:layout_weight=".30"
                 android:layout_height="wrap_content"
                 android:onClick="onCancel"
                 android:text="@string/cancel_button"
-                android:layout_marginLeft="5dp"
+                android:layout_marginStart="5dp"
+                android:layout_marginEnd="20dp"
                 />
         </LinearLayout>
     </LinearLayout>
