@@ -5,6 +5,7 @@ import android.content.Context
 import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
+import android.graphics.Matrix
 import android.net.Uri
 import android.os.Bundle
 import android.provider.MediaStore
@@ -70,7 +71,19 @@ class MainActivity : AppCompatActivity() {
             }
         }
         viewModel.userImage.observe(this, Observer { it ->
-            imageView.setImageBitmap(it)
+            val matrix : Matrix = Matrix()
+            matrix.postRotate(-90F)
+            val scaledBitmap = Bitmap.createScaledBitmap(it, 100, 100, true)
+            val rotatedBitmap = Bitmap.createBitmap(
+                scaledBitmap,
+                0,
+                0,
+                scaledBitmap.width,
+                scaledBitmap.height,
+                matrix,
+                true
+            )
+            imageView.setImageBitmap(rotatedBitmap)
         })
     }
 
