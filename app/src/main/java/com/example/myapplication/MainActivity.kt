@@ -8,6 +8,7 @@ import android.graphics.BitmapFactory
 import android.graphics.Matrix
 import android.net.Uri
 import android.os.Bundle
+import android.os.PersistableBundle
 import android.provider.MediaStore
 import android.util.Base64
 import android.view.View
@@ -54,8 +55,16 @@ class MainActivity : AppCompatActivity() {
         majorView = findViewById(R.id.major_input)
 
         viewModel = ViewModelProvider(this).get(MyViewModel::class.java)
+        val imgStr: String? = savedInstanceState?.getString(IMG_URI)
 
-        loadProfile()
+        if(imgStr !== null){
+            loadProfile(false)
+            val imgUri: Uri = Uri.parse(imgStr)
+            val bitmap = Util.getBitmap(this, imgUri)
+            viewModel.userImage.value = bitmap
+        }else{
+            loadProfile(true)
+        }
 
         Util.checkPermissions(this)
 
@@ -88,7 +97,7 @@ class MainActivity : AppCompatActivity() {
     }
 
 
-    private  fun loadProfile(){
+    private  fun loadProfile(isImgLoad: Boolean){
         val sharedPref = getPreferences(Context.MODE_PRIVATE)
         nameView.setText(sharedPref.getString(NAME, null))
         mailView.setText(sharedPref.getString(MAIL, null))
@@ -97,12 +106,17 @@ class MainActivity : AppCompatActivity() {
         majorView.setText(sharedPref.getString(MAJOR, null))
         femaleView.isChecked = sharedPref.getBoolean(FEMALE, false)
         maleView.isChecked = sharedPref.getBoolean(MALE, false)
-        val imgData: String? = sharedPref.getString(IMG_DATA, null)
-        if(imgData !== null){
+        if(isImgLoad){
+            val imgData: String? = sharedPref.getString(IMG_DATA, null)
             val b: ByteArray = Base64.decode(imgData, Base64.DEFAULT)
             val bitmap = BitmapFactory.decodeByteArray(b, 0, b.size)
             viewModel.userImage.value = bitmap
         }
+    }
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        outState.putString(IMG_URI,tempImgUri.toString())
     }
 
 
@@ -131,7 +145,6 @@ class MainActivity : AppCompatActivity() {
             "saved",
             Toast.LENGTH_SHORT
         ).show()
-        finish()
     }
 
     fun onTakePhoto(view:View){
@@ -153,5 +166,6 @@ class MainActivity : AppCompatActivity() {
         const val MALE = "male"
         const val FEMALE = "female"
         const val IMG_DATA = "img_data"
+        const val IMG_URI = "img_uri"
     }
 }
