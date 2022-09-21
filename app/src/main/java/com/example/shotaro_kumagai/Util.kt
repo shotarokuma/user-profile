@@ -1,4 +1,4 @@
-package com.example.myapplication
+package com.example.shotaro_kumagai
 
 import android.Manifest
 import android.app.Activity

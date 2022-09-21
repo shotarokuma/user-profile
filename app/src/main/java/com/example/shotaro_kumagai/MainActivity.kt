@@ -1,4 +1,4 @@
-package com.example.myapplication
+package com.example.shotaro_kumagai
 
 import android.app.Activity
 import android.content.Context
@@ -8,7 +8,6 @@ import android.graphics.BitmapFactory
 import android.graphics.Matrix
 import android.net.Uri
 import android.os.Bundle
-import android.os.PersistableBundle
 import android.provider.MediaStore
 import android.util.Base64
 import android.view.View
@@ -55,7 +54,7 @@ class MainActivity : AppCompatActivity() {
         majorView = findViewById(R.id.major_input)
 
         viewModel = ViewModelProvider(this).get(MyViewModel::class.java)
-        val imgStr: String? = savedInstanceState?.getString(IMG_URI)
+        val imgStr: String? = savedInstanceState?.getString(IMG_URI,null)
 
         if(imgStr !== null){
             loadProfile(false)
@@ -70,7 +69,7 @@ class MainActivity : AppCompatActivity() {
 
         tempImgFileName= "xd_img.jpg"
         val tempImgFile = File(getExternalFilesDir(null), tempImgFileName)
-        tempImgUri = FileProvider.getUriForFile(this, "com.example.myapplication", tempImgFile)
+        tempImgUri = FileProvider.getUriForFile(this, "com.example.shotaro_kumagai", tempImgFile)
         cameraResult = registerForActivityResult(
             ActivityResultContracts.StartActivityForResult()
         ) { result: ActivityResult ->
@@ -106,8 +105,9 @@ class MainActivity : AppCompatActivity() {
         majorView.setText(sharedPref.getString(MAJOR, null))
         femaleView.isChecked = sharedPref.getBoolean(FEMALE, false)
         maleView.isChecked = sharedPref.getBoolean(MALE, false)
-        if(isImgLoad){
-            val imgData: String? = sharedPref.getString(IMG_DATA, null)
+        val imgData: String? = sharedPref.getString(IMG_DATA, null)
+
+        if(isImgLoad && imgData !== null){
             val b: ByteArray = Base64.decode(imgData, Base64.DEFAULT)
             val bitmap = BitmapFactory.decodeByteArray(b, 0, b.size)
             viewModel.userImage.value = bitmap

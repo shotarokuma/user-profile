@@ -1,4 +1,4 @@
-package com.example.myapplication
+package com.example.shotaro_kumagai
 
 import org.junit.Test
 
