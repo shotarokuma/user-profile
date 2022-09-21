@@ -101,10 +101,17 @@ class MainActivity : AppCompatActivity() {
         nameView.setText(sharedPref.getString(NAME, null))
         mailView.setText(sharedPref.getString(MAIL, null))
         phoneView.setText(sharedPref.getString(PHONE, null))
-        classView.setText(sharedPref.getString(CLASS, null))
+        if (sharedPref.getInt(CLASS,2147483647) !== 2147483647){
+            classView.setText(sharedPref.getInt(CLASS,2147483647).toString())
+        }
         majorView.setText(sharedPref.getString(MAJOR, null))
-        femaleView.isChecked = sharedPref.getBoolean(FEMALE, false)
-        maleView.isChecked = sharedPref.getBoolean(MALE, false)
+        val genderVal: Int = sharedPref.getInt(GENDER,0)
+        if(genderVal === 1){
+            maleView.isChecked = true
+        }else if(genderVal === 2){
+            femaleView.isChecked = true;
+        }
+
         val imgData: String? = sharedPref.getString(IMG_DATA, null)
 
         if(isImgLoad && imgData !== null){
@@ -125,10 +132,18 @@ class MainActivity : AppCompatActivity() {
         sharedPref.edit().putString(NAME, nameView.text.toString()).apply()
         sharedPref.edit().putString(MAIL, mailView.text.toString()).apply()
         sharedPref.edit().putString(PHONE, phoneView.text.toString()).apply()
-        sharedPref.edit().putString(CLASS, classView.text.toString()).apply()
+        val classVal:String = classView.text.toString()
+        sharedPref.edit().putInt(CLASS, classVal.toInt()).apply()
         sharedPref.edit().putString(MAJOR, majorView.text.toString()).apply()
-        sharedPref.edit().putBoolean(MALE, maleView.isChecked).apply()
-        sharedPref.edit().putBoolean(FEMALE, femaleView.isChecked).apply()
+
+        if(!maleView.isChecked && !femaleView.isChecked){
+            sharedPref.edit().putInt(GENDER,0).apply()
+        }else if(maleView.isChecked){
+            sharedPref.edit().putInt(GENDER,1).apply()
+        }else{
+            sharedPref.edit().putInt(GENDER,2).apply()
+        }
+       sharedPref.edit().putString(MAJOR, majorView.text.toString()).apply()
 
        val bas:ByteArrayOutputStream = ByteArrayOutputStream()
        viewModel.userImage.value?.compress(Bitmap.CompressFormat.JPEG, 100, bas)
@@ -162,9 +177,8 @@ class MainActivity : AppCompatActivity() {
         const val MAIL = "mail"
         const val PHONE = "phone"
         const val CLASS = "class"
+        const val GENDER = "gender"
         const val MAJOR = "major"
-        const val MALE = "male"
-        const val FEMALE = "female"
         const val IMG_DATA = "img_data"
         const val IMG_URI = "img_uri"
     }
